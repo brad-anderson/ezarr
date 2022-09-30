@@ -1,49 +1,49 @@
 ---
 version: "3.1"
 services:
-  plex:
-    image: lscr.io/linuxserver/plex:latest
-    container_name: plex
-    network_mode: host
-    environment:
-      - PUID=${UID}
-      - PGID=13000
-      - VERSION=docker
-      - PLEX_CLAIM=${PLEX_CLAIM}
-    volumes:
-      - ${ROOT_DIR}/docker/plex-config:/config
-      - ${ROOT_DIR}/data/media:/data/media
-    restart: unless-stopped
+  # plex:
+  #   image: lscr.io/linuxserver/plex:latest
+  #   container_name: plex
+  #   network_mode: host
+  #   environment:
+  #     - PUID=${UID}
+  #     - PGID=13000
+  #     - VERSION=docker
+  #     - PLEX_CLAIM=${PLEX_CLAIM}
+  #   volumes:
+  #     - ${ROOT_DIR}/docker/plex-config:/config
+  #     - ${ROOT_DIR}/data/media:/data/media
+  #   restart: unless-stopped
 
-  tautulli:
-    image: lscr.io/linuxserver/tautulli:latest
-    container_name: tautulli
-    depends_on:
-      - plex
-    environment:
-      - PUID=${UID}
-      - PGID=13000
-      - TZ=${TIMEZONE}
-    volumes:
-      - ${ROOT_DIR}/docker/tautulli-config:/config
-    ports:
-      - 8181:8181
-    restart: unless-stopped
+  # tautulli:
+  #   image: lscr.io/linuxserver/tautulli:latest
+  #   container_name: tautulli
+  #   depends_on:
+  #     - plex
+  #   environment:
+  #     - PUID=${UID}
+  #     - PGID=13000
+  #     - TZ=${TIMEZONE}
+  #   volumes:
+  #     - ${ROOT_DIR}/docker/tautulli-config:/config
+  #   ports:
+  #     - 8181:8181
+  #   restart: unless-stopped
 
-  jellyfin:
-    image: lscr.io/linuxserver/jellyfin:latest
-    container_name: jellyfin
-    environment:
-      - PUID=${UID}
-      - PGID=13000
-      - UMASK=002
-      - TZ=${TIMEZONE}
-    volumes:
-      - ${ROOT_DIR}/docker/jellyfin-config:/config
-      - ${ROOT_DIR}/data/media:/data/media
-    ports:
-      - 8096:8096
-    restart: unless-stopped
+  # jellyfin:
+  #   image: lscr.io/linuxserver/jellyfin:latest
+  #   container_name: jellyfin
+  #   environment:
+  #     - PUID=${UID}
+  #     - PGID=13000
+  #     - UMASK=002
+  #     - TZ=${TIMEZONE}
+  #   volumes:
+  #     - ${ROOT_DIR}/docker/jellyfin-config:/config
+  #     - ${ROOT_DIR}/data/media:/data/media
+  #   ports:
+  #     - 8096:8096
+  #   restart: unless-stopped
 
 #
 # SERVARR
@@ -136,22 +136,22 @@ services:
       - 9696:9696
     restart: unless-stopped
 
-  jackett:
-    image: lscr.io/linuxserver/jackett:latest
-    container_name: jackett
-    environment:
-      - PUID=13008
-      - PGID=13000
-      - UMASK=002
-      - TZ=${TIMEZONE}
-    volumes:
-      - ${ROOT_DIR}/docker/jackett-config:/config
-    ports:
-      - 9117:9117
-    restart: unless-stopped
+  # jackett:
+  #   image: lscr.io/linuxserver/jackett:latest
+  #   container_name: jackett
+  #   environment:
+  #     - PUID=13008
+  #     - PGID=13000
+  #     - UMASK=002
+  #     - TZ=${TIMEZONE}
+  #   volumes:
+  #     - ${ROOT_DIR}/docker/jackett-config:/config
+  #   ports:
+  #     - 9117:9117
+  #   restart: unless-stopped
 
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:latest
+    image: cr.hotio.dev/hotio/qbittorrent
     container_name: qbittorrent
     environment:
       - PUID=13007
@@ -166,4 +166,35 @@ services:
       - 8080:8080
       - 6881:6881
       - 6881:6881/udp
+    restart: unless-stopped
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=13009
+      - PGID=13000
+      - UMASK=002
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${ROOT_DIR}/docker/bazarr-config:/config
+      - ${ROOT_DIR}/data/media:/data/media
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    environment:
+      - PUID=13010
+      - PGID=13000
+      - UMASK=002
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${ROOT_DIR}/docker/sabnzbd-config:/config
+      - ${ROOT_DIR}/data/usenet:/data/usenet:rw
+    ports:
+      - 8080:8080
+      - 9090:9090
     restart: unless-stopped
